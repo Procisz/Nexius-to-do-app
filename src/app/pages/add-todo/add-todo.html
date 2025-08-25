@@ -1,0 +1,50 @@
+<section class="flex flex-col gap-2 p-4">
+	<h2 class="text-lg font-medium">Új TODO létrehozása</h2>
+
+	<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+		<div class="flex flex-col gap-4">
+			<mat-form-field appearance="fill" class="w-full">
+				<mat-label>Feladat címe</mat-label>
+				<input matInput formControlName="label" required autocomplete="off" />
+
+				@if (form.controls.label.invalid && form.controls.label.touched) {
+					<mat-error>Ez a mező kötelező.</mat-error>
+				}
+			</mat-form-field>
+
+			<mat-form-field appearance="fill" class="w-full">
+				<mat-label>Leírás</mat-label>
+				<textarea
+					matInput
+					placeholder="TODO leírás"
+					formControlName="description"
+					required
+					rows="5"
+				></textarea>
+
+				@if (form.controls.description.invalid && form.controls.description.touched) {
+					<mat-error>{{
+						form.controls.description.errors | formControlErrors
+					}}</mat-error>
+				}
+			</mat-form-field>
+		</div>
+
+		<button
+			class="w-max mx-auto"
+			type="submit"
+			[disabled]="form.invalid || isFormSubmitting()"
+			matButton="filled"
+		>
+			@if (isFormSubmitting()) {
+				<mat-progress-spinner
+					animate.enter="fade-in"
+					[diameter]="24"
+					[mode]="'indeterminate'"
+				></mat-progress-spinner>
+			} @else {
+				<span animate.enter="fade-in"> Új feladat hozzáadása </span>
+			}
+		</button>
+	</form>
+</section>

@@ -1,0 +1,120 @@
+<main class="flex flex-col h-[var(--app-content-h)]" [style.--app-content-h]="contentHeight()">
+	<section class="flex flex-col">
+		<form [formGroup]="form" class="flex flex-col gap-2">
+			<mat-button-toggle-group formControlName="filter" class="w-max">
+				@for (item of filters; track item.value) {
+					<mat-button-toggle [value]="item.value">
+						{{ item.label }}
+					</mat-button-toggle>
+				}
+			</mat-button-toggle-group>
+
+			<mat-form-field>
+				<mat-label>Keresés</mat-label>
+				<input matInput formControlName="search" placeholder="tanár, iskola, diák... " />
+				<mat-hint>Csak a leírásban keres.</mat-hint>
+
+				<mat-icon matPrefix>search</mat-icon>
+				@if (form.controls.search.value) {
+					<mat-icon
+						class="cursor-pointer"
+						animate.enter="fade-in"
+						animate.leave="fade-out"
+						matSuffix
+						(click)="form.controls.search.reset()"
+						>clear</mat-icon
+					>
+				}
+			</mat-form-field>
+		</form>
+
+		<app-paginator
+			[(pageSize)]="pageSize"
+			[(pageIndex)]="pageIndex"
+			[totalItems]="this.todos.value()?.totalItems ?? 0"
+			[pageSizeOptions]="[5, 10, 15, 25, 50]"
+		/>
+	</section>
+
+	<section class="flex min-h-0 flex-1 flex-col gap-1 py-6">
+		<div class="flex items-center gap-6">
+			<button
+				[disabled]="!todos.value()?.items?.length"
+				(click)="accordionRef().openAll()"
+				matButton
+			>
+				Összes kinyit
+			</button>
+
+			<button
+				[disabled]="!todos.value()?.items?.length"
+				(click)="accordionRef().closeAll()"
+				matButton
+			>
+				Összes becsuk
+			</button>
+		</div>
+
+		<div class="flex-1 min-h-0 overflow-y-auto px-6 -mx-6 py-1 -my-1">
+			<mat-accordion multi>
+				@if (todos.isLoading()) {
+					<mat-progress-bar
+						animate.enter="fade-in"
+						mode="indeterminate"
+					></mat-progress-bar>
+				} @else {
+					@for (todo of todos.value()?.items; track todo.label) {
+						<mat-expansion-panel animate.enter="fade-in">
+							<mat-expansion-panel-header>
+								<mat-panel-title>
+									<div class="flex items-center gap-4">
+										<mat-checkbox
+											#checkbox
+											[checked]="todo.completed"
+											appStopPropagation
+											(change)="onTodoCheckboxChanged($event, todo)"
+										></mat-checkbox>
+
+										<span
+											[class.line-through]="
+												checkbox.checked &&
+												form.controls.filter.value === FILTER_VALUES.All
+											"
+											>{{ todo.label }}</span
+										>
+									</div>
+								</mat-panel-title>
+							</mat-expansion-panel-header>
+
+							<ng-template matExpansionPanelContent>
+								<div class="flex flex-col gap-4 p-2">
+									<div class="flex items-center justify-between gap-6">
+										<div class="flex items-center gap-2 text-gray-400">
+											<mat-icon>today</mat-icon>
+											<span
+												>Létrehozva:
+												{{
+													todo.createdAt | date: 'yyyy.MM.dd | HH:mm:ss'
+												}}</span
+											>
+										</div>
+
+										<button
+											(click)="onDeleteTodoButtonClicked(todo)"
+											matMiniFab
+										>
+											<mat-icon>delete</mat-icon>
+										</button>
+									</div>
+									<p>{{ todo.description }}</p>
+								</div>
+							</ng-template>
+						</mat-expansion-panel>
+					} @empty {
+						<p animate.enter="fade-in" class="p-2">Nincsenek TODO elemek.</p>
+					}
+				}
+			</mat-accordion>
+		</div>
+	</section>
+</main>

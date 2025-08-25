@@ -1,0 +1,41 @@
+<div class="flex flex-col max-w-7xl mx-auto">
+	<mat-toolbar #toolbar class="toolbar !bg-slate-50" [ngClass]="{ fixed: !isDesktop() }">
+		<button matIconButton (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+		<h1 class="whitespace-normal">{{ 'Nexius TODO app | @Ágoston ZAJKÁS' }}</h1>
+	</mat-toolbar>
+
+	<mat-sidenav-container
+		class="flex-1 !bg-slate-50"
+		[style.marginTop.px]="isDesktop() ? 0 : fixedTopGap"
+	>
+		<mat-sidenav
+			class="!bg-slate-50"
+			#sidenav
+			[mode]="isDesktop() ? 'side' : 'over'"
+			[fixedInViewport]="!isDesktop()"
+			[fixedTopGap]="fixedTopGap"
+			[opened]="isDesktop()"
+		>
+			<mat-nav-list>
+				@for (item of menuItems; track item.path) {
+					<a
+						mat-list-item
+						[routerLink]="['/', item.path]"
+						#rla="routerLinkActive"
+						routerLinkActive="active-link"
+						[routerLinkActiveOptions]="{ exact: true }"
+						[activated]="rla.isActive"
+						(click)="isDesktop() ? null : sidenav.close()"
+					>
+						<mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+						<span matListItemTitle>{{ item.label }}</span>
+					</a>
+				}
+			</mat-nav-list>
+		</mat-sidenav>
+
+		<mat-sidenav-content class="px-6">
+			<router-outlet />
+		</mat-sidenav-content>
+	</mat-sidenav-container>
+</div>
