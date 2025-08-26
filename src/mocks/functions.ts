@@ -20,8 +20,10 @@ export function createListTodosResponse(
     }
 
     if (searchTerm)
-        result.items = result.items.filter((todo: Todo) =>
-            normalizeString(todo.description).includes(normalizeString(searchTerm)),
+        result.items = result.items.filter(
+            (todo: Todo) =>
+                normalizeString(todo.label).includes(normalizeString(searchTerm)) ||
+                normalizeString(todo.description).includes(normalizeString(searchTerm)),
         );
 
     const total: number = result.items.length;

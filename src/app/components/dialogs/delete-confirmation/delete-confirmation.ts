@@ -9,9 +9,11 @@ import type { Todo } from '../../../services/todo.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatButtonModule, MatDialogModule],
     template: `
-        <h2 mat-dialog-title>TODO törlése</h2>
+        <h2 mat-dialog-title>Feladat törlése</h2>
         <mat-dialog-content class="mat-typography">
-            <h3>Biztosan törölni szeretnéd a(z) "{{ data.label }}" elemet?</h3>
+            <h3>
+                Biztosan törölni szeretnéd a(z) <strong>{{ data.label }}</strong> elemet?
+            </h3>
         </mat-dialog-content>
 
         <mat-dialog-actions align="end">
