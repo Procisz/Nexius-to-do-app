@@ -1,5 +1,8 @@
-<section class="flex flex-col gap-2 p-4">
-	<h2 class="text-lg font-medium">Új TODO létrehozása</h2>
+<section
+	class="flex flex-col gap-2"
+	[ngClass]="{ 'p-4': !dataInEditMode(), 'p-6 min-w-[320px]': dataInEditMode() }"
+>
+	<h2 class="text-lg font-medium">{{ pageTitle() }}</h2>
 
 	<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
 		<div class="flex flex-col gap-4">
@@ -30,21 +33,29 @@
 			</mat-form-field>
 		</div>
 
-		<button
-			class="w-max mx-auto"
-			type="submit"
-			[disabled]="form.invalid || isFormSubmitting()"
-			matButton="filled"
-		>
-			@if (isFormSubmitting()) {
-				<mat-progress-spinner
-					animate.enter="fade-in"
-					[diameter]="24"
-					[mode]="'indeterminate'"
-				></mat-progress-spinner>
-			} @else {
-				<span animate.enter="fade-in"> Új feladat hozzáadása </span>
+		<div class="flex items-center justify-between gap-2 mx-auto">
+			@if (dataInEditMode()) {
+				<button type="button" mat-dialog-close [disabled]="isFormSubmitting()" matButton>
+					Mégsem
+				</button>
 			}
-		</button>
+			<button
+				type="submit"
+				[disabled]="form.invalid || isFormSubmitting()"
+				matButton="filled"
+			>
+				@if (isFormSubmitting()) {
+					<mat-progress-spinner
+						animate.enter="fade-in"
+						[diameter]="24"
+						[mode]="'indeterminate'"
+					></mat-progress-spinner>
+				} @else {
+					<span animate.enter="fade-in">
+						{{ dataInEditMode() ? 'Mentés' : 'Új feladat hozzáadása' }}
+					</span>
+				}
+			</button>
+		</div>
 	</form>
 </section>

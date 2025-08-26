@@ -99,12 +99,20 @@
 											>
 										</div>
 
-										<button
-											(click)="onDeleteTodoButtonClicked(todo)"
-											matMiniFab
-										>
-											<mat-icon>delete</mat-icon>
-										</button>
+										<div class="flex items-center gap-4">
+											<button
+												(click)="onEditTodoButtonClicked(todo)"
+												matMiniFab
+											>
+												<mat-icon>edit</mat-icon>
+											</button>
+											<button
+												(click)="onDeleteTodoButtonClicked(todo)"
+												matMiniFab
+											>
+												<mat-icon>delete</mat-icon>
+											</button>
+										</div>
 									</div>
 									<p>{{ todo.description }}</p>
 								</div>

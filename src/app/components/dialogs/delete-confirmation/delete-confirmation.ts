@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 
@@ -21,6 +21,5 @@ import type { Todo } from '../../../services/todo.service';
     `,
 })
 export class DeleteConfirmation {
-    // eslint-disable-next-line @angular-eslint/prefer-inject
-    constructor(@Inject(MAT_DIALOG_DATA) public readonly data: Todo) {}
+    protected readonly data = inject<Todo>(MAT_DIALOG_DATA);
 }

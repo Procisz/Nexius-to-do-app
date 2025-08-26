@@ -9,8 +9,9 @@ export const routes: Routes = [
         redirectTo: ROUTE_PATHS.ListTodos,
     },
     {
-        path: ROUTE_PATHS.AddDodo,
-        loadComponent: () => import('./pages/add-todo/add-todo').then((m) => m.AddTodo),
+        path: ROUTE_PATHS.AddOrEditTodo,
+        loadComponent: () =>
+            import('./pages/add-todo/add-or-edit-todo').then((m) => m.AddOrEditTodo),
     },
     {
         path: ROUTE_PATHS.ListTodos,

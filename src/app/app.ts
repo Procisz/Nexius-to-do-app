@@ -60,7 +60,7 @@ export class App {
     );
     protected readonly fixedTopGap = 56;
     protected readonly menuItems: MenuItem[] = [
-        { label: 'Új TODO elem létrehozása', path: ROUTE_PATHS.AddDodo, icon: 'add' },
+        { label: 'Új TODO elem létrehozása', path: ROUTE_PATHS.AddOrEditTodo, icon: 'add' },
         { label: 'TODO elemek listázása', path: ROUTE_PATHS.ListTodos, icon: 'list' },
     ];
 

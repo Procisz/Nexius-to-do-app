@@ -30,6 +30,7 @@ import type { GetTodosMockResponse, Todo } from '../../services/todo.service';
 import { TodoService } from '../../services/todo.service';
 import { ToolbarService } from '../../services/toolbar.service';
 import { FILTER_VALUES } from '../../utils/constants/form.constants';
+import { AddOrEditTodo } from '../add-todo/add-or-edit-todo';
 
 import { filterValues, type Filter } from './list-todos.data';
 
@@ -86,15 +87,30 @@ export class ListTodos {
         this.pageSize,
         this.pageIndex,
     );
-
     protected readonly contentHeight = computed<string>(
         () => `calc(100svh - ${this._toolbarService.toolbarElementHeight()}px)`,
     );
+
+    private readonly _todoToEdit = signal<Todo | null>(null);
 
     protected onTodoCheckboxChanged(event: MatCheckboxChange, todo: Todo): void {
         this._todoService
             .updateTodo$({ ...todo, completed: event.checked })
             .pipe(
+                tap((response: Todo) => this._updateTodos(response)),
+                takeUntilDestroyed(this._destroyRef),
+            )
+            .subscribe();
+    }
+
+    protected onEditTodoButtonClicked(todo: Todo): void {
+        this._todoToEdit.set(todo);
+        const dialogRef = this._dialog.open(AddOrEditTodo, { data: this._todoToEdit });
+
+        dialogRef
+            .afterClosed()
+            .pipe(
+                filter(Boolean),
                 tap((response: Todo) => this._updateTodos(response)),
                 takeUntilDestroyed(this._destroyRef),
             )
